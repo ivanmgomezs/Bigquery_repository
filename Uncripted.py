@@ -1,27 +1,39 @@
+def check_key(message,keyword):
+    message_real=message#lower(message)
+    keyword_real=keyword#lower(keyword)
+    message_array=message_real.split()
+    for i in range(1,26):
+        new_key=''
+        for k in keyword:
+            if k.isupper():
+                new_key+=chr((ord(k) - ord('A') + i) % 26 + ord('A'))
+            else:
+                new_key+=chr((ord(k) - ord('a') + i) % 26 + ord('a'))
+        for j in message_array:
+            if j==new_key:
+                return i
+    return 0
 
+# def gen_key(message,keyword):
+#     for i in range(0,26):
+#         new_key=''
+#         for k in keyword:
+#             if k.isupper():
+#                 new_key+=chr((ord(k) - ord('A') - i) % 26 + ord('A'))
+#             else:
+#                 new_key+=k
+#         if check_key(message,new_key):
+#             return i
 
-# def decipher(message,keyword):
-#     shift=find_shift(message,keyword)
-#     decrypted_text=
+def uncrypted(message,keyword):
+    position=check_key(message,keyword)
+    un_message=''
+    for letter in message:
+        if letter.isupper():
+            un_message+=chr((ord(letter)-ord('A')-position) % 26 + ord('A'))
+        else:
+            un_message+=chr((ord(letter)-ord('a')-position) % 26 + ord('a'))
+    return un_message
 
-def find_shift(message,keyword):
-    len_message=len(message)
-    len_keyword=len(keyword)
-    for i in range(len(message)-len(keyword)+1):
-        slice_ch=message[i:i+len(keyword)]
-        # print(slice_ch)
-        shift=calculate_shift(slice_ch,keyword)
-        if shift is not None:
-            return shift
-    return None
+print(uncrypted('wklv lv d whvw','test'))
 
-def calculate_shift(message_segment,keyword):
-    shift=ord(message_segment[0])-ord(keyword[0])
-    for i in range(1,len(message_segment)):
-        if (ord(message_segment[i])-ord(keyword[i])) != shift:
-            return None
-    return shift
-
-
-
-print(find_shift('this is a test','test'))
